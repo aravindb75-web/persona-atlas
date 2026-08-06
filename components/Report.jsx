@@ -1,4 +1,5 @@
-import { TYPES, ROLES, IDENTITY, AXES } from "@/lib/types";
+import { TYPES, ROLES, IDENTITY } from "@/lib/types";
+import { AXES } from "@/lib/questions";
 
 // Build representative dimension bars from the 4-letter code + identity.
 // (Every type/gallery page renders consistent bars without needing raw answers.)
