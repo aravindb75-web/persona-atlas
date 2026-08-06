@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getSupabase } from "@/lib/supabase";
 import Report from "@/components/Report";
@@ -13,6 +13,19 @@ export default function ReportGate({ code, identity }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [note, setNote] = useState("");
+
+  // Already logged in (via the nav Log-in)? Unlock the report automatically.
+  useEffect(() => {
+    const supabase = getSupabase();
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session?.user) { setEmail(data.session.user.email || ""); setStep("verified"); }
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      if (session?.user) { setEmail(session.user.email || ""); setStep("verified"); }
+      else setStep("email");
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   async function sendCode(e) {
     e.preventDefault();

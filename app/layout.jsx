@@ -1,6 +1,7 @@
 import "./globals.css";
 import Link from "next/link";
 import { Sora, Inter } from "next/font/google";
+import AuthNav from "@/components/AuthNav";
 
 const display = Sora({ subsets: ["latin"], weight: ["500", "600", "700", "800"], variable: "--font-display" });
 const body = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-body" });
@@ -22,6 +23,7 @@ function Nav() {
           <Link href="/#types">The 16 Characters</Link>
           <Link href="/compatibility">Compatibility</Link>
           <Link href="/test" className="btn btn--primary btn--sm">Take the Test</Link>
+          <AuthNav />
         </nav>
       </div>
     </header>

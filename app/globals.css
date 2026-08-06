@@ -246,6 +246,18 @@ ul.arrows li::before { content: "→"; color: var(--brand-2); }
 .linklike { background: none; border: none; color: var(--brand); font-weight: 700; cursor: pointer; font-size: 14px; padding: 4px; }
 .verified-banner { background: linear-gradient(135deg, rgba(16,185,129,0.14), rgba(14,165,233,0.1)); border: 1px solid rgba(16,185,129,0.3); color: #0e7a54; font-weight: 700; border-radius: 16px; padding: 15px 18px; text-align: center; margin-bottom: 18px; }
 
+/* ---------- Auth nav + login modal ---------- */
+.authnav { display: inline-flex; align-items: center; gap: 10px; }
+.authnav__email { font-size: 13px; color: var(--muted); font-weight: 600; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.authnav__ph { display: inline-block; width: 84px; height: 20px; }
+.modal-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(28,22,48,0.5); backdrop-filter: blur(6px); display: grid; place-items: center; padding: 20px; }
+.modal { position: relative; width: 100%; max-width: 420px; background: var(--card-solid); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 34px 30px; box-shadow: var(--shadow-lg); text-align: center; }
+.modal__close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 18px; color: var(--muted); cursor: pointer; line-height: 1; }
+.modal__close:hover { color: var(--ink); }
+.modal__brand { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-display); font-weight: 800; font-size: 18px; }
+.modal__title { font-size: 25px; margin: 14px 0 6px; font-family: var(--font-display); letter-spacing: -0.5px; }
+.modal__sub { color: var(--muted); font-size: 14.5px; margin: 0 auto 20px; max-width: 340px; }
+
 /* ---------- Radar ---------- */
 .radar-wrap { display: flex; justify-content: center; margin: 8px 0 4px; }
 
