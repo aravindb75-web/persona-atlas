@@ -245,6 +245,11 @@ ul.arrows li::before { content: "→"; color: var(--brand-2); }
 .gate__err { color: var(--brand-3); font-size: 14px; margin: 12px 0 0; font-weight: 700; }
 .gate__fine { color: var(--muted); font-size: 12px; margin-top: 20px; }
 .linklike { background: none; border: none; color: var(--brand); font-weight: 700; cursor: pointer; font-size: 14px; padding: 4px; }
+.btn--google { background: #fff; color: #2b2740; border: 1px solid var(--line); width: 100%; font-family: var(--font-body); font-weight: 700; gap: 12px; box-shadow: 0 2px 10px rgba(40,25,80,0.07); }
+.btn--google:hover { box-shadow: var(--shadow); transform: translateY(-1px); filter: none; }
+.btn--google::after { display: none; }
+.or-div { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12.5px; font-weight: 600; margin: 15px auto; max-width: 380px; }
+.or-div::before, .or-div::after { content: ""; height: 1px; flex: 1; background: var(--line); }
 .verified-banner { background: linear-gradient(135deg, rgba(16,185,129,0.14), rgba(14,165,233,0.1)); border: 1px solid rgba(16,185,129,0.3); color: #0e7a54; font-weight: 700; border-radius: 16px; padding: 15px 18px; text-align: center; margin-bottom: 18px; }
 
 /* ---------- Auth nav + login modal ---------- */

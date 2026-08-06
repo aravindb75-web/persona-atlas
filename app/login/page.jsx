@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { getSupabase } from "@/lib/supabase";
+import GoogleButton from "@/components/GoogleButton";
 
 function nextUrl() {
   if (typeof window === "undefined") return "/test";
@@ -21,9 +22,15 @@ export default function LoginPage() {
   const [note, setNote] = useState("");
 
   useEffect(() => {
-    getSupabase().auth.getSession().then(({ data }) => {
+    const supabase = getSupabase();
+    supabase.auth.getSession().then(({ data }) => {
       if (data.session?.user) router.replace(nextUrl());
     });
+    // handles the return from Google OAuth (session established from the URL code)
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      if (session?.user) router.replace(nextUrl());
+    });
+    return () => sub.subscription.unsubscribe();
   }, [router]);
 
   async function sendCode(e) {
@@ -61,6 +68,13 @@ export default function LoginPage() {
             ? "We use a passwordless one-time code. New here? Your account is created automatically."
             : `We sent a 6-digit code to ${email}. It expires in 1 hour.`}
         </p>
+
+        {step === "email" && (
+          <>
+            <GoogleButton redirectTo={typeof window !== "undefined" ? `${window.location.origin}/login?next=${encodeURIComponent(nextUrl())}` : undefined} />
+            <div className="or-div"><span>or use email</span></div>
+          </>
+        )}
 
         <AnimatePresence mode="wait">
           {step === "email" ? (

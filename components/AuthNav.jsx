@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getSupabase } from "@/lib/supabase";
+import GoogleButton from "@/components/GoogleButton";
 
 export default function AuthNav() {
   const [user, setUser] = useState(null);
@@ -94,6 +95,13 @@ export default function AuthNav() {
                   ? "One email, one 6-digit code — no password. New here? This creates your account automatically."
                   : "We sent a 6-digit code to your email. It expires in 1 hour."}
               </p>
+
+              {step === "email" && (
+                <>
+                  <GoogleButton />
+                  <div className="or-div"><span>or use email</span></div>
+                </>
+              )}
 
               <AnimatePresence mode="wait">
                 {step === "email" ? (
