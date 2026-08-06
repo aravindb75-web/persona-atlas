@@ -177,7 +177,7 @@ function CompletionForm({ email, result, onDone }) {
 
   return (
     <main className="test-wrap">
-      <div className="q-card" style={{ textAlign: "left", padding: "34px 30px" }}>
+      <div className="q-card form-card">
         <h2 style={{ fontFamily: "var(--font-display)", textAlign: "center", marginTop: 0 }}>Almost there — a few details</h2>
         <p style={{ color: "var(--muted)", textAlign: "center", marginTop: 0 }}>
           Fill in your details and your full report downloads instantly. All fields are required.
