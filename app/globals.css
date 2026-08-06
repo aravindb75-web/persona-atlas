@@ -141,8 +141,8 @@ a:hover { text-decoration: none; opacity: 0.9; }
 .q-card { border-radius: var(--radius-lg); padding: 48px 34px; box-shadow: var(--shadow-lg); text-align: center; animation: rise .4s ease; }
 @keyframes rise { from { opacity: 0; transform: translateY(16px) scale(.99); } to { opacity: 1; transform: none; } }
 .q-card .q-text { font-size: 26px; font-weight: 700; font-family: var(--font-display); margin: 6px 0 34px; line-height: 1.28; letter-spacing: -0.4px; }
-.likert { display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
-.likert__end { font-weight: 700; font-size: 14px; width: 76px; font-family: var(--font-display); }
+.likert-labels { display: flex; justify-content: space-between; max-width: 480px; margin: 0 auto 16px; font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+.likert { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: nowrap; }
 .likert__end--agree { color: var(--diplomat); }
 .likert__end--dis { color: var(--brand-3); }
 .dot { border-radius: 50%; border: 3px solid; background: transparent; cursor: pointer; transition: transform .14s, background .14s, box-shadow .2s; padding: 0; }
@@ -324,8 +324,22 @@ ul.arrows li::before { content: "→"; color: var(--brand-2); }
 }
 @media (max-width: 540px) {
   .roles, .type-grid { grid-template-columns: 1fr; }
-  .likert__end { width: 100%; }
   .hero__stats { gap: 24px; }
+  /* keep all 7 answer dots on one row */
+  .q-card { padding: 30px 14px; }
+  .likert { gap: 7px; }
+  .dot.lg { width: 42px; height: 42px; }
+  .dot.md { width: 35px; height: 35px; }
+  .dot.sm { width: 29px; height: 29px; }
+  .dot.xs { width: 24px; height: 24px; }
+}
+@media (max-width: 380px) {
+  .likert { gap: 5px; }
+  .dot { border-width: 2.5px; }
+  .dot.lg { width: 36px; height: 36px; }
+  .dot.md { width: 31px; height: 31px; }
+  .dot.sm { width: 26px; height: 26px; }
+  .dot.xs { width: 22px; height: 22px; }
 }
 
 /* Compact nav on phones (Android/iOS) so the buttons don't crowd */

@@ -92,8 +92,11 @@ export default function TestPage() {
 
       <div className="q-card" key={i}>
         <div className="q-text">{q.text}</div>
+        <div className="likert-labels">
+          <span className="likert__end--agree">Agree</span>
+          <span className="likert__end--dis">Disagree</span>
+        </div>
         <div className="likert">
-          <span className="likert__end likert__end--agree">Agree</span>
           {SCALE.map((sc) => {
             const cls = sc.side === "agree" ? "dot--agree" : sc.side === "disagree" ? "dot--dis" : "dot--neutral";
             const active = answers[i] === sc.value;
@@ -102,7 +105,6 @@ export default function TestPage() {
                 aria-label={sc.label || `Rating ${sc.value}`} onClick={() => choose(sc.value)} />
             );
           })}
-          <span className="likert__end likert__end--dis">Disagree</span>
         </div>
       </div>
 
