@@ -265,6 +265,9 @@ ul.arrows li::before { content: "→"; color: var(--brand-2); }
 .fld > span { font-size: 12.5px; font-weight: 700; color: var(--muted); font-family: var(--font-display); }
 .fld .gate__input { text-align: left; font-size: 15px; padding: 12px 14px; }
 .fld--full { grid-column: 1 / -1; }
+.fld select.gate__input { cursor: pointer; appearance: auto; }
+.country-sel { max-width: 210px; flex-shrink: 0; }
+@media (max-width: 540px) { .country-sel { max-width: 130px; } }
 .verified-pill { display: inline-flex; align-items: center; padding: 0 14px; border-radius: 12px; background: rgba(16,185,129,0.14); color: #0e7a54; font-weight: 800; font-size: 13px; white-space: nowrap; }
 .demo-note { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.32); color: #8a5a12; border-radius: 12px; padding: 10px 14px; font-size: 13px; }
 @media (max-width: 540px) { .form-grid { grid-template-columns: 1fr; } }

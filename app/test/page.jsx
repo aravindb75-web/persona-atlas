@@ -8,6 +8,7 @@ import { scoreTest, SCALE } from "@/lib/scoring";
 import { getSupabase } from "@/lib/supabase";
 import { downloadReportPdf } from "@/lib/generatePdf";
 import { TYPES, ROLES } from "@/lib/types";
+import { COUNTRIES, flag } from "@/lib/countries";
 import Character from "@/components/Character";
 
 export default function TestPage() {
@@ -117,38 +118,28 @@ export default function TestPage() {
   );
 }
 
-// ---------------- Completion form (mandatory details + contact verification) ----------------
+// ---------------- Completion form (mandatory details) ----------------
 function CompletionForm({ email, result, onDone }) {
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
   const [full, setFull] = useState("");
   const [fullTouched, setFullTouched] = useState(false);
+  const [gender, setGender] = useState("");
+  const [age, setAge] = useState("");
+  const [countryIdx, setCountryIdx] = useState(0); // default India
   const [contact, setContact] = useState("");
-  const [phoneStep, setPhoneStep] = useState("idle"); // idle|sent|verified
-  const [genCode, setGenCode] = useState("");
-  const [codeInput, setCodeInput] = useState("");
-  const [phoneErr, setPhoneErr] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
 
-  const contactOk = /^(\+91[\-\s]?)?[6-9]\d{9}$/.test(contact.replace(/\s/g, ""));
+  const country = COUNTRIES[countryIdx];
+  const digits = contact.replace(/\D/g, "");
+  const ageNum = parseInt(age, 10);
   const fullName = fullTouched ? full : `${first} ${last}`.trim();
-  const canSubmit = first.trim() && last.trim() && fullName.trim() && contactOk && phoneStep === "verified";
-
-  function sendPhoneCode() {
-    if (!contactOk) { setPhoneErr("Enter a valid Indian mobile number first."); return; }
-    setPhoneErr("");
-    const code = String(Math.floor(100000 + Math.random() * 900000));
-    setGenCode(code);
-    setPhoneStep("sent");
-    setCodeInput("");
-    // NOTE: real SMS delivery requires an SMS provider (Twilio/MSG91). Until one
-    // is configured, we run in demo mode and surface the code in-app.
-  }
-  function verifyPhone() {
-    if (codeInput.trim() === genCode) { setPhoneStep("verified"); setPhoneErr(""); }
-    else setPhoneErr("Incorrect verification code. Please try again.");
-  }
+  const canSubmit =
+    first.trim() && last.trim() && fullName.trim() &&
+    (gender === "Male" || gender === "Female") &&
+    ageNum >= 5 && ageNum <= 120 &&
+    digits.length >= 6;
 
   async function submit(e) {
     e.preventDefault();
@@ -161,10 +152,14 @@ function CompletionForm({ email, result, onDone }) {
         first_name: first.trim(),
         last_name: last.trim(),
         full_name: fullName.trim(),
-        contact_number: contact.replace(/\s/g, ""),
+        gender,
+        age: ageNum,
+        country: country.n,
+        dial_code: "+" + country.d,
+        contact_number: `+${country.d} ${digits}`,
         type_code: result.code,
         identity: result.identity,
-        phone_verified: true,
+        phone_verified: false,
       });
       if (error) {
         if (error.code === "23505") { setErr("This email has already completed the test."); setBusy(false); return; }
@@ -183,7 +178,7 @@ function CompletionForm({ email, result, onDone }) {
       <div className="q-card" style={{ textAlign: "left", padding: "34px 30px" }}>
         <h2 style={{ fontFamily: "var(--font-display)", textAlign: "center", marginTop: 0 }}>Almost there — a few details</h2>
         <p style={{ color: "var(--muted)", textAlign: "center", marginTop: 0 }}>
-          Verify your contact and your full report downloads instantly. All fields are required.
+          Fill in your details and your full report downloads instantly. All fields are required.
         </p>
         <form onSubmit={submit} className="form-grid">
           <label className="fld"><span>First name *</span>
@@ -193,42 +188,39 @@ function CompletionForm({ email, result, onDone }) {
           <label className="fld fld--full"><span>Full name *</span>
             <input className="gate__input" required value={fullName}
               onChange={(e) => { setFullTouched(true); setFull(e.target.value); }} placeholder="Full name" /></label>
+
+          <label className="fld"><span>Gender *</span>
+            <select className="gate__input" required value={gender} onChange={(e) => setGender(e.target.value)}>
+              <option value="" disabled>Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select></label>
+          <label className="fld"><span>Age *</span>
+            <input className="gate__input" type="number" min="5" max="120" required value={age}
+              onChange={(e) => setAge(e.target.value)} placeholder="Age" /></label>
+
           <label className="fld fld--full"><span>Email *</span>
             <input className="gate__input" value={email} readOnly style={{ opacity: 0.7 }} /></label>
 
-          <label className="fld fld--full"><span>Contact number * (India)</span>
+          <label className="fld fld--full"><span>Contact number *</span>
             <div style={{ display: "flex", gap: 8 }}>
+              <select className="gate__input country-sel" value={countryIdx}
+                onChange={(e) => setCountryIdx(parseInt(e.target.value, 10))} aria-label="Country code">
+                {COUNTRIES.map((c, idx) => (
+                  <option key={c.c} value={idx}>{flag(c.c)} {c.n} (+{c.d})</option>
+                ))}
+              </select>
               <input className="gate__input" required inputMode="tel" value={contact}
-                onChange={(e) => { setContact(e.target.value); setPhoneStep("idle"); }}
-                placeholder="10-digit mobile" style={{ flex: 1 }} disabled={phoneStep === "verified"} />
-              {phoneStep === "verified"
-                ? <span className="verified-pill">✓ Verified</span>
-                : <button type="button" className="btn btn--ghost btn--sm" onClick={sendPhoneCode}>Send code</button>}
+                onChange={(e) => setContact(e.target.value)} placeholder="Mobile number" style={{ flex: 1 }} />
             </div>
           </label>
-
-          {phoneStep === "sent" && (
-            <div className="fld fld--full">
-              <div className="demo-note">
-                📱 <strong>Demo mode</strong> — real SMS needs an SMS provider (Twilio/MSG91). Your code is:{" "}
-                <strong style={{ letterSpacing: 2 }}>{genCode}</strong>
-              </div>
-              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-                <input className="gate__input gate__input--otp" inputMode="numeric" maxLength={6} value={codeInput}
-                  onChange={(e) => setCodeInput(e.target.value.replace(/\D/g, ""))} placeholder="Enter code" style={{ flex: 1 }} />
-                <button type="button" className="btn btn--primary btn--sm" onClick={verifyPhone}>Verify</button>
-              </div>
-              {phoneErr && <p className="gate__err">⚠ {phoneErr}</p>}
-            </div>
-          )}
-          {phoneStep === "idle" && phoneErr && <p className="gate__err fld--full">⚠ {phoneErr}</p>}
 
           <div className="fld--full" style={{ marginTop: 6 }}>
             <button className="btn btn--primary btn--lg" style={{ width: "100%" }} disabled={!canSubmit || busy}>
               {busy ? "Preparing your report…" : "Submit & download my report ⬇"}
             </button>
             {!canSubmit && <p style={{ fontSize: 12.5, color: "var(--muted)", textAlign: "center", marginTop: 8 }}>
-              Fill every field and verify your contact number to continue.</p>}
+              Fill every field to continue.</p>}
             {err && <p className="gate__err" style={{ textAlign: "center" }}>⚠ {err}</p>}
           </div>
         </form>
