@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getSupabase } from "@/lib/supabase";
 import Report from "@/components/Report";
+import DownloadPdf from "@/components/DownloadPdf";
 
 export default function ReportGate({ code, identity }) {
   const [step, setStep] = useState("email"); // email | otp | verified
@@ -55,6 +56,9 @@ export default function ReportGate({ code, identity }) {
     return (
       <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
         <div className="verified-banner">✅ Verified — here's your complete report, {email.split("@")[0]}.</div>
+        <div className="no-print" style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 18 }}>
+          <DownloadPdf code={code} identity={identity} />
+        </div>
         <Report code={code} identity={identity} />
       </motion.div>
     );

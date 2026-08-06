@@ -1,5 +1,6 @@
 import { TYPES, ROLES, IDENTITY } from "@/lib/types";
 import { AXES } from "@/lib/questions";
+import RadarChart from "@/components/RadarChart";
 
 // Build representative dimension bars from the 4-letter code + identity.
 // (Every type/gallery page renders consistent bars without needing raw answers.)
@@ -76,11 +77,23 @@ export default function Report({ code, identity }) {
       <section className="panel" id="dimensions">
         <h3><span className="ic">📊</span> Your five dimensions</h3>
         <p>Every personality is a blend of five sliding scales. Here's how the {t.code}-{identity} tends to sit on each.</p>
-        <DimBar dimKey="EI" data={dims.EI} color={role.color} />
-        <DimBar dimKey="NS" data={dims.NS} color={role.color} />
-        <DimBar dimKey="TF" data={dims.TF} color={role.color} />
-        <DimBar dimKey="JP" data={dims.JP} color={role.color} />
-        <DimBar dimKey="AT" data={dims.AT} color={role.color} />
+        <div className="two-col" style={{ alignItems: "center" }}>
+          <RadarChart
+            color={role.color}
+            data={["EI", "NS", "TF", "JP", "AT"].map((k) => ({
+              label: AXES[k].poles[dims[k].letter === AXES[k].first ? 0 : 1],
+              sub: `${dims[k].letter} · ${dims[k].strength}%`,
+              value: dims[k].strength,
+            }))}
+          />
+          <div>
+            <DimBar dimKey="EI" data={dims.EI} color={role.color} />
+            <DimBar dimKey="NS" data={dims.NS} color={role.color} />
+            <DimBar dimKey="TF" data={dims.TF} color={role.color} />
+            <DimBar dimKey="JP" data={dims.JP} color={role.color} />
+            <DimBar dimKey="AT" data={dims.AT} color={role.color} />
+          </div>
+        </div>
       </section>
 
       {/* Strengths & weaknesses */}

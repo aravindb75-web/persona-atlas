@@ -1,5 +1,9 @@
 import "./globals.css";
 import Link from "next/link";
+import { Sora, Inter } from "next/font/google";
+
+const display = Sora({ subsets: ["latin"], weight: ["500", "600", "700", "800"], variable: "--font-display" });
+const body = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-body" });
 
 export const metadata = {
   title: "Personova — Discover the Character Inside You",
@@ -17,9 +21,7 @@ function Nav() {
         <nav className="nav__links">
           <Link href="/#types">The 16 Characters</Link>
           <Link href="/#how">How it works</Link>
-          <Link href="/test" className="btn btn--primary" style={{ padding: "10px 20px", fontSize: 14 }}>
-            Take the Test
-          </Link>
+          <Link href="/test" className="btn btn--primary btn--sm">Take the Test</Link>
         </nav>
       </div>
     </header>
@@ -30,12 +32,8 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="container footer__inner">
-        <div>
-          <strong>Personova</strong> · An independent, educational personality explorer.
-        </div>
-        <div>
-          Framework inspired by Jungian typology & the Big-Five-adjacent 5-dimension model.
-        </div>
+        <div><strong>Personova</strong> · An independent, educational personality explorer.</div>
+        <div>Framework inspired by Jungian typology &amp; the Big-Five-adjacent 5-dimension model.</div>
       </div>
     </footer>
   );
@@ -43,8 +41,9 @@ function Footer() {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body>
+        <div className="aurora" aria-hidden="true" />
         <Nav />
         {children}
         <Footer />
