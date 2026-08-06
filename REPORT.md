@@ -4,6 +4,12 @@
 **Source repo:** https://github.com/aravindb75-web/persona-atlas
 **Stack:** Next.js 14 (App Router) · React 18 · **react-three-fiber + three.js (3D)** · **framer-motion** · **Supabase Auth (email OTP)** · deployed on Vercel (production)
 
+## v4 highlights — science, careers & compatibility
+- **Scientifically-validated item bank** — the test now uses the **public-domain IPIP Big-Five Factor Markers** (Goldberg, 1992; 50 items, 10 per factor). Answers score **both** the 16-type sliders and a real **Big Five (OCEAN)** profile, shown as its own panel in the report. This makes the assessment psychometrically defensible.
+- **O*NET / BLS career data** — the Careers section now shows a **"Career outlook" table**: each fitting role → its BLS occupation, **median annual pay**, and **2022–2032 job-growth outlook** (public-domain U.S. Bureau of Labor Statistics / O*NET figures).
+- **Interactive 16×16 compatibility matrix** — a new **/compatibility** page: a color-coded heatmap of how every type pairs with every other (love / friendship / teamwork), with hover detail and a plain-English explanation per pairing. Each report also gets a **"Best matches"** panel linking into it.
+- All three also flow into the **downloadable PDF** (Big Five bars, career-outlook lines, best-matches list).
+
 ## v3 highlights — premium pass
 - **Premium UI redesign** — display typography (**Sora** headings + **Inter** body via `next/font`), **glassmorphism** surfaces, an animated **aurora** background, refined spectrum palette, gradient buttons with a shine sweep, and richer hover/motion throughout.
 - **Radar chart** — a custom, dependency-free SVG pentagon radar visualises your 5 dimensions inside the report.
