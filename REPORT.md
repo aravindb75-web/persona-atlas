@@ -4,6 +4,11 @@
 **Source repo:** https://github.com/aravindb75-web/persona-atlas
 **Stack:** Next.js 14 (App Router) · React 18 · **react-three-fiber + three.js (3D)** · **framer-motion** · **Supabase Auth (email OTP)** · deployed on Vercel (production)
 
+## v3 highlights — premium pass
+- **Premium UI redesign** — display typography (**Sora** headings + **Inter** body via `next/font`), **glassmorphism** surfaces, an animated **aurora** background, refined spectrum palette, gradient buttons with a shine sweep, and richer hover/motion throughout.
+- **Radar chart** — a custom, dependency-free SVG pentagon radar visualises your 5 dimensions inside the report.
+- **Real one-click PDF** — `@react-pdf/renderer` generates a branded multi-page PDF (cover + overview + dimensions + strengths + education + careers + finance + relationships + growth) and downloads it; the library is lazy-loaded on click so it never bloats the page. (Verified generating in-browser.)
+
 ## v2 highlights (what changed)
 - **Rebranded** to **Personova** with a cosmic/crystal theme.
 - **Live 3D hero** — an interactive react-three-fiber scene: a faceted core with 16 orbiting, family-coloured low-poly shards, sparkles, and mouse-reactive camera.
