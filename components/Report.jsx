@@ -164,10 +164,10 @@ export default function Report({ code, identity }) {
         <h4>Roles that fit you well</h4>
         <div className="tags">{t.careers.map((s) => <span className="tag" key={s}>{s}</span>)}</div>
 
-        <h4>Career outlook (U.S. data)</h4>
+        <h4>Career outlook (India)</h4>
         <div className="onet-scroll">
           <table className="onet">
-            <thead><tr><th>Role</th><th>Maps to (BLS)</th><th>Median pay</th><th>Job outlook →2032</th></tr></thead>
+            <thead><tr><th>Role</th><th>Indian job market</th><th>Median salary (INR)</th><th>Demand outlook</th></tr></thead>
             <tbody>
               {t.careers.map((role) => {
                 const o = lookupCareer(role);
@@ -184,7 +184,7 @@ export default function Report({ code, identity }) {
           </table>
         </div>
         <p style={{ fontSize: 12.5, color: "var(--muted)", margin: "8px 0 0" }}>
-          Source: U.S. Bureau of Labor Statistics Occupational Outlook Handbook / O*NET (public domain). National medians, approximate.
+          Approximate Indian median salaries (AmbitionBox / Glassdoor India / PayScale India, 2024). Indicative — actual pay varies by city, company, and experience.
         </p>
 
         <h4>Your work style</h4>
