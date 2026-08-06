@@ -22,7 +22,10 @@ function Nav() {
         <nav className="nav__links">
           <Link href="/#types">The 16 Characters</Link>
           <Link href="/compatibility">Compatibility</Link>
-          <Link href="/test" className="btn btn--primary btn--sm">Take the Test</Link>
+          <Link href="/test" className="btn btn--primary btn--sm">
+            <span className="nav-cta__full">Take the Test</span>
+            <span className="nav-cta__short">Test</span>
+          </Link>
           <AuthNav />
         </nav>
       </div>

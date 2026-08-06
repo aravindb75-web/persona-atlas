@@ -70,8 +70,9 @@ a:hover { text-decoration: none; opacity: 0.9; }
   padding: 14px 28px; border-radius: 999px; font-weight: 700; font-size: 16px;
   font-family: var(--font-display); border: none; cursor: pointer;
   transition: transform .16s cubic-bezier(.2,.8,.2,1), box-shadow .2s, filter .2s;
-  text-decoration: none; position: relative; overflow: hidden;
+  text-decoration: none; position: relative; overflow: hidden; white-space: nowrap;
 }
+.nav-cta__short { display: none; }
 .btn--primary { background: linear-gradient(120deg, var(--brand), var(--brand-2) 60%, var(--brand-3)); color: #fff; box-shadow: 0 14px 32px rgba(109,59,245,0.38); }
 .btn--primary::after { content:""; position:absolute; inset:0; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%); transform: translateX(-120%); transition: transform .6s; }
 .btn--primary:hover { transform: translateY(-2px); filter: brightness(1.05); }
@@ -320,9 +321,11 @@ ul.arrows li::before { content: "→"; color: var(--brand-2); }
   .nav__links { gap: 8px; }
   .brand { font-size: 17px; gap: 8px; }
   .brand__dot { width: 28px; height: 28px; border-radius: 9px; font-size: 13px; }
-  .nav .btn, .nav__links .btn--sm { padding: 8px 14px; font-size: 13px; }
+  .nav .btn, .nav__links .btn--sm { padding: 8px 13px; font-size: 13px; }
   .authnav__email { display: none; } /* free up room; the Sign-out button stays */
   .authnav { gap: 6px; }
+  .nav-cta__full { display: none; }
+  .nav-cta__short { display: inline; } /* "Test" instead of "Take the Test" */
 }
 @media (max-width: 380px) {
   .nav .btn, .nav__links .btn--sm { padding: 7px 11px; font-size: 12px; }
