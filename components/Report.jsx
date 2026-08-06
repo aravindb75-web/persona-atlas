@@ -4,6 +4,7 @@ import { AXES, FACTORS } from "@/lib/questions";
 import { bigFiveForType } from "@/lib/scoring";
 import { lookupCareer, fmtMoney } from "@/lib/onet";
 import { bestMatches, band } from "@/lib/compatibility";
+import { FAMOUS } from "@/lib/famous";
 import RadarChart from "@/components/RadarChart";
 
 // Build representative dimension bars from the 4-letter code + identity.
@@ -253,7 +254,7 @@ export default function Report({ code, identity }) {
         <h3><span className="ic">🌱</span> Your growth path</h3>
         <ul className="ticks arrows">{t.growth.map((s) => <li key={s}>{s}</li>)}</ul>
         <h4>People who share your type</h4>
-        <div className="famous-row">{t.famous.map((s) => <span className="famous" key={s}>{s}</span>)}</div>
+        <div className="famous-row">{(FAMOUS[code] || t.famous).map((s) => <span className="famous" key={s}>{s}</span>)}</div>
       </section>
     </div>
   );

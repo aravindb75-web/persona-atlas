@@ -72,7 +72,7 @@ export default function AuthNav() {
           <button className="btn btn--ghost btn--sm" onClick={signOut}>Sign out</button>
         </span>
       ) : (
-        <button className="btn btn--ghost btn--sm" onClick={() => { reset(); setOpen(true); }}>Log in</button>
+        <button className="btn btn--ghost btn--sm" onClick={() => { reset(); setOpen(true); }}>Sign in</button>
       )}
 
       <AnimatePresence>
@@ -88,7 +88,7 @@ export default function AuthNav() {
             >
               <button className="modal__close" onClick={() => setOpen(false)} aria-label="Close">✕</button>
               <div className="modal__brand"><span className="brand__dot">◆</span> Personova</div>
-              <h2 className="modal__title">{step === "email" ? "Log in or sign up" : "Enter your code"}</h2>
+              <h2 className="modal__title">{step === "email" ? "Sign in or sign up" : "Enter your code"}</h2>
               <p className="modal__sub">
                 {step === "email"
                   ? "One email, one 6-digit code — no password. New here? This creates your account automatically."

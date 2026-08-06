@@ -55,7 +55,7 @@ export default function LoginPage() {
         <div className="modal__brand" style={{ justifyContent: "center" }}>
           <span className="brand__dot">◆</span> Personova
         </div>
-        <h2 style={{ marginTop: 14 }}>{step === "email" ? "Log in to continue" : "Enter your code"}</h2>
+        <h2 style={{ marginTop: 14 }}>{step === "email" ? "Sign in to continue" : "Enter your code"}</h2>
         <p className="gate__sub">
           {step === "email"
             ? "We use a passwordless one-time code. New here? Your account is created automatically."
