@@ -288,6 +288,16 @@ ul.arrows li::before { content: "→"; color: var(--brand-2); }
 }
 .verified-pill { display: inline-flex; align-items: center; padding: 0 14px; border-radius: 12px; background: rgba(16,185,129,0.14); color: #0e7a54; font-weight: 800; font-size: 13px; white-space: nowrap; }
 .demo-note { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.32); color: #8a5a12; border-radius: 12px; padding: 10px 14px; font-size: 13px; }
+
+/* ---------- Book genre picker ---------- */
+.fld-title { display: block; font-size: 13px; font-weight: 800; color: var(--brand); font-family: var(--font-display); margin-bottom: 8px; }
+.genre-box { border: 1px solid var(--line); border-radius: 14px; padding: 6px 14px; max-height: 320px; overflow-y: auto; background: rgba(255,255,255,0.6); }
+.genre-item { padding: 9px 0; border-bottom: 1px dashed var(--line); }
+.genre-item:last-child { border-bottom: none; }
+.genre-head { display: flex; align-items: center; gap: 9px; font-weight: 700; cursor: pointer; font-size: 14.5px; color: var(--ink); }
+.genre-head input, .sub-chk input { width: 17px; height: 17px; accent-color: var(--brand); cursor: pointer; flex-shrink: 0; margin: 0; }
+.sub-list { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 9px 0 2px 26px; }
+.sub-chk { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #45455a; cursor: pointer; }
 @media (max-width: 540px) { .form-grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- Radar ---------- */

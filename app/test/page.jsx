@@ -9,6 +9,7 @@ import { getSupabase } from "@/lib/supabase";
 import { downloadReportPdf } from "@/lib/generatePdf";
 import { TYPES, ROLES } from "@/lib/types";
 import { COUNTRIES, flag } from "@/lib/countries";
+import { GENRES, expandSelection } from "@/lib/genres";
 import Character from "@/components/Character";
 
 export default function TestPage() {
@@ -130,8 +131,13 @@ function CompletionForm({ email, result, onDone }) {
   const [age, setAge] = useState("");
   const [countryIdx, setCountryIdx] = useState(0); // default India
   const [contact, setContact] = useState("");
+  const [genreSel, setGenreSel] = useState(() => new Set());
+  const [subSel, setSubSel] = useState(() => new Set());
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+
+  function toggleGenre(g) { setGenreSel((p) => { const n = new Set(p); n.has(g) ? n.delete(g) : n.add(g); return n; }); }
+  function toggleSub(s) { setSubSel((p) => { const n = new Set(p); n.has(s) ? n.delete(s) : n.add(s); return n; }); }
 
   const country = COUNTRIES[countryIdx];
   const digits = contact.replace(/\D/g, "");
@@ -149,6 +155,7 @@ function CompletionForm({ email, result, onDone }) {
     setBusy(true); setErr("");
     try {
       const supabase = getSupabase();
+      const { genres, subGenres } = expandSelection(genreSel, subSel);
       const { error } = await supabase.from("personova_results").insert({
         email,
         first_name: first.trim(),
@@ -159,6 +166,8 @@ function CompletionForm({ email, result, onDone }) {
         country: country.n,
         dial_code: "+" + country.d,
         contact_number: `+${country.d} ${digits}`,
+        genres: genres.length ? genres.join("; ") : null,
+        sub_genres: subGenres.length ? subGenres.join("; ") : null,
         type_code: result.code,
         identity: result.identity,
         phone_verified: false,
@@ -190,6 +199,30 @@ function CompletionForm({ email, result, onDone }) {
           <label className="fld fld--full"><span>Full name *</span>
             <input className="gate__input" required value={fullName}
               onChange={(e) => { setFullTouched(true); setFull(e.target.value); }} placeholder="Full name" /></label>
+
+          <div className="fld--full">
+            <span className="fld-title">What kind of books do you like to read?</span>
+            <div className="genre-box">
+              {GENRES.map(({ g, subs }) => (
+                <div className="genre-item" key={g}>
+                  <label className="genre-head">
+                    <input type="checkbox" checked={genreSel.has(g)} onChange={() => toggleGenre(g)} />
+                    <span>{g}</span>
+                  </label>
+                  {subs.length > 0 && (
+                    <div className="sub-list">
+                      {subs.map((s) => (
+                        <label className="sub-chk" key={s}>
+                          <input type="checkbox" checked={subSel.has(s)} onChange={() => toggleSub(s)} />
+                          <span>{s}</span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
 
           <label className="fld"><span>Gender *</span>
             <select className="gate__input" required value={gender} onChange={(e) => setGender(e.target.value)}>
