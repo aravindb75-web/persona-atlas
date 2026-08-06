@@ -1,16 +1,20 @@
 {
-  "name": "personality-explorer",
-  "version": "1.0.0",
+  "name": "personova",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
     "next": "^14.2.35",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "three": "^0.169.0",
+    "@react-three/fiber": "^8.17.10",
+    "@react-three/drei": "^9.114.0",
+    "framer-motion": "^11.11.0",
+    "@supabase/supabase-js": "^2.45.4"
   }
 }

@@ -196,6 +196,41 @@ ul.arrows li::before { content: "→"; color: var(--brand-2); }
   .doodle--animated * { animation: none !important; }
 }
 
+/* ---------- Low-poly character ---------- */
+.lp { display: inline-grid; place-items: center; }
+.lp__svg { overflow: visible; }
+.lp--animated .lp__body { transform-origin: 120px 322px; animation: bob 3.4s ease-in-out infinite; }
+.lp--animated .lp__prop { transform-origin: 196px 70px; animation: float 3.2s ease-in-out infinite; }
+.lp--animated .lp__shadow { transform-origin: 120px 322px; animation: shadow 3.4s ease-in-out infinite; }
+
+/* ---------- 3D hero ---------- */
+.hero3d { width: 100%; height: 440px; position: relative; cursor: grab; }
+.hero3d__loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-weight: 700; }
+
+/* ---------- Tilt gallery ---------- */
+.tilt { transform-style: preserve-3d; }
+.tilt__link { display: block; background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--brand); border-radius: 20px; padding: 14px 10px; text-align: center; box-shadow: var(--shadow); transition: box-shadow .2s; }
+.tilt__link:hover { box-shadow: var(--shadow-lg); text-decoration: none; }
+.tilt__code { font-weight: 900; font-size: 18px; margin-top: 4px; }
+.tilt__name { color: var(--muted); font-size: 13px; }
+
+.cta-panel { text-align: center; background: linear-gradient(135deg,#efe6f7,#e2f4ec); }
+
+/* ---------- Email + OTP gate ---------- */
+.gate { background: var(--card); border: 1px solid var(--line); border-radius: 24px; padding: 40px 30px; box-shadow: var(--shadow-lg); text-align: center; margin-top: 26px; }
+.gate__lock { font-size: 40px; }
+.gate h2 { font-size: 28px; margin: 8px 0 6px; }
+.gate__sub { color: var(--muted); max-width: 480px; margin: 0 auto 22px; }
+.gate__form { display: flex; flex-direction: column; gap: 12px; max-width: 360px; margin: 0 auto; align-items: stretch; }
+.gate__input { padding: 15px 18px; border-radius: 14px; border: 2px solid var(--line); font-size: 17px; text-align: center; outline: none; transition: border-color .15s; font-family: inherit; }
+.gate__input:focus { border-color: var(--brand-2); }
+.gate__input--otp { letter-spacing: 10px; font-weight: 800; font-size: 24px; }
+.gate__note { color: var(--diplomat); font-size: 14px; max-width: 420px; margin: 14px auto 0; font-weight: 600; }
+.gate__err { color: #d1607a; font-size: 14px; margin: 12px 0 0; font-weight: 700; }
+.gate__fine { color: var(--muted); font-size: 12px; margin-top: 18px; }
+.linklike { background: none; border: none; color: var(--brand); font-weight: 700; cursor: pointer; font-size: 14px; padding: 4px; }
+.verified-banner { background: #e2f4ec; border: 1px solid #bfe8d5; color: #1f7a52; font-weight: 800; border-radius: 16px; padding: 14px 18px; text-align: center; margin-bottom: 18px; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .hero__grid { grid-template-columns: 1fr; }

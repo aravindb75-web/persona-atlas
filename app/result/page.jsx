@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { TYPES, ROLES, IDENTITY } from "@/lib/types";
-import Doodle from "@/components/Doodle";
-import Report from "@/components/Report";
-import PrintButton from "@/components/PrintButton";
+import Character from "@/components/Character";
+import ReportGate from "@/components/ReportGate";
 
 function parse(raw) {
   const val = (raw || "INTJ-A").toUpperCase();
@@ -16,7 +15,7 @@ export function generateMetadata({ searchParams }) {
   const { code, identity } = parse(searchParams?.type);
   const t = TYPES[code];
   return {
-    title: `${t.name} (${code}-${identity}) — Your Persona Atlas Report`,
+    title: `${t.name} (${code}-${identity}) — Personova`,
     description: t.tagline,
   };
 }
@@ -29,13 +28,9 @@ export default function ResultPage({ searchParams }) {
 
   return (
     <main className="container container--narrow" style={{ padding: "34px 22px 60px" }}>
-      {/* Result hero */}
-      <div
-        className="result-hero"
-        style={{ background: `linear-gradient(135deg, ${role.color}, ${role.color}cc)` }}
-      >
+      <div className="result-hero" style={{ background: `linear-gradient(135deg, ${role.color}, ${role.color}cc)` }}>
         <div className="result-hero__grid">
-          <Doodle code={code} size={230} />
+          <Character code={code} size={240} />
           <div>
             <div className="code">{code}-{identity}</div>
             <h1>The {t.name}</h1>
@@ -48,25 +43,13 @@ export default function ResultPage({ searchParams }) {
         </div>
       </div>
 
-      {/* Actions */}
       <div className="no-print" style={{ display: "flex", gap: 12, margin: "20px 0", flexWrap: "wrap" }}>
-        <Link href="/test" className="btn btn--primary">↻ Retake the test</Link>
-        <PrintButton />
+        <Link href="/test" className="btn btn--ghost">↻ Retake the test</Link>
         <Link href="/#types" className="btn btn--ghost">Compare other types</Link>
       </div>
 
-      {/* Full dynamic report */}
-      <Report code={code} identity={identity} />
-
-      {/* Explore other identity variant */}
-      <div className="panel no-print" style={{ textAlign: "center", marginTop: 20 }}>
-        <p style={{ margin: "0 0 12px", color: "var(--muted)" }}>
-          Curious how the other Identity variant differs?
-        </p>
-        <Link href={`/result?type=${code}-${identity === "A" ? "T" : "A"}`} className="btn btn--ghost">
-          View the {code}-{identity === "A" ? "T (Turbulent)" : "A (Assertive)"} version
-        </Link>
-      </div>
+      {/* Email + OTP gate → reveals the full report */}
+      <ReportGate code={code} identity={identity} />
     </main>
   );
 }
