@@ -20,7 +20,7 @@ function Nav() {
         </Link>
         <nav className="nav__links">
           <Link href="/#types">The 16 Characters</Link>
-          <Link href="/#how">How it works</Link>
+          <Link href="/compatibility">Compatibility</Link>
           <Link href="/test" className="btn btn--primary btn--sm">Take the Test</Link>
         </nav>
       </div>

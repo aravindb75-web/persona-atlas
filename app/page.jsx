@@ -24,7 +24,7 @@ export default function Home() {
       <section className="hero">
         <div className="container hero__grid">
           <div>
-            <span className="pill">✨ Free · 60 questions · ~10 minutes · 3D</span>
+            <span className="pill">✨ Free · 50 IPIP items · Big Five · 3D</span>
             <h1>Discover the <span>universe</span> inside you.</h1>
             <p className="lead">
               Personova maps your personality across five dimensions into one of 16 vivid
@@ -56,7 +56,7 @@ export default function Home() {
           </div>
           <div className="features">
             <div className="feature"><div className="ic">📝</div><h4>1 · Answer honestly</h4>
-              <p>Rate 60 statements on a 7-point Agree–Disagree scale. No right answers — only yours.</p></div>
+              <p>Rate 50 validated IPIP Big-Five statements on a 7-point Agree–Disagree scale. No right answers — only yours.</p></div>
             <div className="feature"><div className="ic">🧬</div><h4>2 · Meet your character</h4>
               <p>Five dimensions resolve into one of 16 low-poly personalities, each with its own vibe.</p></div>
             <div className="feature"><div className="ic">🔐</div><h4>3 · Unlock your report</h4>

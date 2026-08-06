@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { TYPES, ROLES, IDENTITY } from "@/lib/types";
-import { AXES } from "@/lib/questions";
+import { AXES, FACTORS } from "@/lib/questions";
+import { bigFiveForType } from "@/lib/scoring";
+import { lookupCareer, fmtMoney } from "@/lib/onet";
+import { bestMatches, band } from "@/lib/compatibility";
 
 // Build representative dimension strengths (mirrors Report.buildDims).
 function buildDims(code, identity) {
@@ -30,6 +33,8 @@ export default function DownloadPdf({ code, identity }) {
       const id = IDENTITY[identity];
       const c = role.color;
       const dims = buildDims(code, identity);
+      const five = bigFiveForType(code, identity);
+      const matches = bestMatches(code, 5);
 
       const s = StyleSheet.create({
         page: { padding: 42, fontSize: 10.5, color: "#2b2740", fontFamily: "Helvetica", lineHeight: 1.5 },
@@ -90,6 +95,14 @@ export default function DownloadPdf({ code, identity }) {
               );
             })}
 
+            <Text style={s.h2}>Big Five profile (IPIP)</Text>
+            {["O", "C", "E", "A", "S"].map((f) => (
+              <View key={f}>
+                <View style={s.row}><Text>{FACTORS[f].full}</Text><Text>{five[f]}%</Text></View>
+                <View style={s.barBg}><View style={[s.barFg, { width: `${five[f]}%` }]} /></View>
+              </View>
+            ))}
+
             <Text style={s.h2}>Strengths & blind spots</Text>
             <Text style={s.h3}>Natural strengths</Text>
             {t.strengths.map((x) => <Li key={x}>{x}</Li>)}
@@ -112,6 +125,13 @@ export default function DownloadPdf({ code, identity }) {
             <Tags items={t.fields} />
             <Text style={s.h3}>Roles that fit you well</Text>
             <Tags items={t.careers} />
+            <Text style={s.h3}>Career outlook (U.S. BLS / O*NET)</Text>
+            {t.careers.map((role) => {
+              const o = lookupCareer(role);
+              if (!o) return null;
+              return <Text key={role} style={s.li}>• {role} — {o.median ? fmtMoney(o.median) + "/yr" : o.medianText}, {o.growth}</Text>;
+            })}
+
             <Text style={s.h3}>Your work style</Text>
             <Text style={s.p}>{t.workStyle}</Text>
             <Foot />
@@ -135,6 +155,9 @@ export default function DownloadPdf({ code, identity }) {
             <Text style={s.p}>{t.relationships.idealPartner}</Text>
             <Text style={s.h3}>Watch out for</Text>
             {t.relationships.watchOut.map((x) => <Li key={x}>{x}</Li>)}
+
+            <Text style={s.h2}>Your best matches</Text>
+            {matches.map((m) => <Text key={m.code} style={s.li}>• {m.code} · {m.name} — {m.v}/100 ({band(m.v).label})</Text>)}
 
             <Text style={s.h2}>Your growth path</Text>
             {t.growth.map((x) => <Li key={x}>{x}</Li>)}

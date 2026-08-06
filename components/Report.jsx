@@ -1,5 +1,9 @@
+import Link from "next/link";
 import { TYPES, ROLES, IDENTITY } from "@/lib/types";
-import { AXES } from "@/lib/questions";
+import { AXES, FACTORS } from "@/lib/questions";
+import { bigFiveForType } from "@/lib/scoring";
+import { lookupCareer, fmtMoney } from "@/lib/onet";
+import { bestMatches, band } from "@/lib/compatibility";
 import RadarChart from "@/components/RadarChart";
 
 // Build representative dimension bars from the 4-letter code + identity.
@@ -47,6 +51,8 @@ export default function Report({ code, identity }) {
   const role = ROLES[t.role];
   const id = IDENTITY[identity] || IDENTITY.A;
   const dims = buildDims(code, identity);
+  const five = bigFiveForType(code, identity);
+  const matches = bestMatches(code, 5);
 
   return (
     <div className="report">
@@ -56,11 +62,13 @@ export default function Report({ code, identity }) {
         <div className="toc">
           <a href="#overview">Overview</a>
           <a href="#dimensions">Your 5 dimensions</a>
+          <a href="#bigfive">Big Five profile</a>
           <a href="#strengths">Strengths & blind spots</a>
           <a href="#education">Education</a>
-          <a href="#career">Careers & fields</a>
+          <a href="#career">Careers & outlook</a>
           <a href="#finance">Financial style</a>
           <a href="#love">Relationships</a>
+          <a href="#matches">Best matches</a>
           <a href="#growth">Growth path</a>
         </div>
       </div>
@@ -96,6 +104,33 @@ export default function Report({ code, identity }) {
         </div>
       </section>
 
+      {/* Big Five (scientific) */}
+      <section className="panel" id="bigfive">
+        <h3><span className="ic">🧪</span> Your Big Five profile</h3>
+        <p>
+          Personova's five sliders map onto the <strong>Big Five (OCEAN)</strong> — the model psychologists
+          actually use. This test draws on the public-domain{" "}
+          <strong>IPIP Big-Five Factor Markers</strong> (Goldberg, 1992), so your profile is scientifically grounded.
+        </p>
+        {["O", "C", "E", "A", "S"].map((f) => {
+          const F = FACTORS[f];
+          const v = five[f];
+          return (
+            <div className="dim" key={f}>
+              <div className="dim__top">
+                <span>{F.full}</span>
+                <span className="dim__pct">{v}%</span>
+                <span>{v >= 50 ? F.high : F.low}</span>
+              </div>
+              <div className="dim__bar"><div className="dim__fill" style={{ width: `${v}%`, background: role.color }} /></div>
+            </div>
+          );
+        })}
+        <p className="no-print" style={{ fontSize: 13, color: "var(--muted)", marginTop: 10 }}>
+          Percentiles are illustrative of the {code}-{identity} pattern; taking the test yourself computes them from your answers.
+        </p>
+      </section>
+
       {/* Strengths & weaknesses */}
       <section className="panel" id="strengths">
         <h3><span className="ic">💪</span> Strengths & blind spots</h3>
@@ -128,6 +163,30 @@ export default function Report({ code, identity }) {
         <div className="tags">{t.fields.map((s) => <span className="tag" key={s}>{s}</span>)}</div>
         <h4>Roles that fit you well</h4>
         <div className="tags">{t.careers.map((s) => <span className="tag" key={s}>{s}</span>)}</div>
+
+        <h4>Career outlook (U.S. data)</h4>
+        <div className="onet-scroll">
+          <table className="onet">
+            <thead><tr><th>Role</th><th>Maps to (BLS)</th><th>Median pay</th><th>Job outlook →2032</th></tr></thead>
+            <tbody>
+              {t.careers.map((role) => {
+                const o = lookupCareer(role);
+                return (
+                  <tr key={role}>
+                    <td>{role}</td>
+                    <td>{o ? o.label : "—"}</td>
+                    <td>{o ? (o.median ? fmtMoney(o.median) + "/yr" : o.medianText) : "—"}</td>
+                    <td>{o ? o.growth : "—"}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p style={{ fontSize: 12.5, color: "var(--muted)", margin: "8px 0 0" }}>
+          Source: U.S. Bureau of Labor Statistics Occupational Outlook Handbook / O*NET (public domain). National medians, approximate.
+        </p>
+
         <h4>Your work style</h4>
         <p>{t.workStyle}</p>
       </section>
@@ -163,6 +222,30 @@ export default function Report({ code, identity }) {
         <p>{t.relationships.idealPartner}</p>
         <h4>Watch out for</h4>
         <ul className="ticks warns">{t.relationships.watchOut.map((s) => <li key={s}>{s}</li>)}</ul>
+      </section>
+
+      {/* Best matches */}
+      <section className="panel" id="matches">
+        <h3><span className="ic">💘</span> Your best matches</h3>
+        <p>Types that tend to pair most naturally with the {t.name}, based on shared world-view and complementary styles.</p>
+        <div className="match-grid">
+          {matches.map((m) => {
+            const bd = band(m.v);
+            return (
+              <Link key={m.code} href={`/result?type=${m.code}-A`} className="match-card">
+                <div className="match-card__score" style={{ background: bd.color }}>{m.v}</div>
+                <div>
+                  <div className="match-card__code" style={{ color: ROLES[TYPES[m.code].role].color }}>{m.code}</div>
+                  <div className="match-card__name">{m.name}</div>
+                  <div className="match-card__band" style={{ color: bd.color }}>{bd.label} match</div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+        <Link href="/compatibility" className="btn btn--ghost no-print" style={{ marginTop: 16 }}>
+          Explore the full 16×16 compatibility matrix →
+        </Link>
       </section>
 
       {/* Growth */}
