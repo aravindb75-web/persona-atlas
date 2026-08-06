@@ -1,8 +1,22 @@
-# Persona Atlas — Build & Analysis Report
+# Personova — Build & Analysis Report
 
 **Live site:** https://persona-atlas-dusky-s-shrine.vercel.app
 **Source repo:** https://github.com/aravindb75-web/persona-atlas
-**Stack:** Next.js 14 (App Router) · React 18 · deployed on Vercel (production)
+**Stack:** Next.js 14 (App Router) · React 18 · **react-three-fiber + three.js (3D)** · **framer-motion** · **Supabase Auth (email OTP)** · deployed on Vercel (production)
+
+## v2 highlights (what changed)
+- **Rebranded** to **Personova** with a cosmic/crystal theme.
+- **Live 3D hero** — an interactive react-three-fiber scene: a faceted core with 16 orbiting, family-coloured low-poly shards, sparkles, and mouse-reactive camera.
+- **New low-poly faceted CHARACTERS** (not blobs) — each of the 16 types is a distinct geometric figure with its own hair, skin, outfit colour, accessory (glasses/shades), and floating prop, styled after the 16personalities low-poly art.
+- **Interactive 3D-tilt gallery** — the character cards tilt toward your cursor (framer-motion).
+- **Email + OTP gate before the report** — the full life report is locked until the visitor verifies their email with a 6-digit one-time code (Supabase Auth). Verified emails + result type are stored in a `personova_leads` table.
+
+### ⚠️ One 30-second setup step for the OTP email
+Supabase Auth is fully wired (the `/auth/v1/otp` endpoint returns 200 and `verifyOtp` is implemented). For the **6-digit code to appear in the email**, add the token to the templates once:
+- Supabase dashboard → **Authentication → Email Templates** → open **"Magic Link"** and **"Confirm signup"** → add a line like `Your Personova code is: {{ .Token }}` → Save.
+Until then, the email contains a magic link instead of a visible code. (Free-tier email is rate-limited to a few sends/hour and may land in spam — add a custom SMTP/Resend sender for production volume.)
+
+---
 
 ---
 
