@@ -314,6 +314,21 @@ ul.arrows li::before { content: "→"; color: var(--brand-2); }
   .hero__stats { gap: 24px; }
 }
 
+/* Compact nav on phones (Android/iOS) so the buttons don't crowd */
+@media (max-width: 640px) {
+  .nav__inner { height: 60px; }
+  .nav__links { gap: 8px; }
+  .brand { font-size: 17px; gap: 8px; }
+  .brand__dot { width: 28px; height: 28px; border-radius: 9px; font-size: 13px; }
+  .nav .btn, .nav__links .btn--sm { padding: 8px 14px; font-size: 13px; }
+  .authnav__email { display: none; } /* free up room; the Sign-out button stays */
+  .authnav { gap: 6px; }
+}
+@media (max-width: 380px) {
+  .nav .btn, .nav__links .btn--sm { padding: 7px 11px; font-size: 12px; }
+  .nav__links { gap: 6px; }
+}
+
 /* ---------- Print ---------- */
 @media print {
   .nav, .footer, .no-print, .btn, .aurora { display: none !important; }
