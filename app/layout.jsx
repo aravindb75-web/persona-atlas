@@ -1,6 +1,7 @@
 import "./globals.css";
 import Link from "next/link";
 import { Sora, Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import AuthNav from "@/components/AuthNav";
 
 const display = Sora({ subsets: ["latin"], weight: ["500", "600", "700", "800"], variable: "--font-display" });
@@ -52,6 +53,7 @@ export default function RootLayout({ children }) {
         <Nav />
         {children}
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

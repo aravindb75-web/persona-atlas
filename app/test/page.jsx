@@ -10,6 +10,7 @@ import { downloadReportPdf } from "@/lib/generatePdf";
 import { TYPES, ROLES } from "@/lib/types";
 import { COUNTRIES, flag } from "@/lib/countries";
 import { GENRES, expandSelection } from "@/lib/genres";
+import { track } from "@vercel/analytics";
 import Character from "@/components/Character";
 
 export default function TestPage() {
@@ -29,7 +30,7 @@ export default function TestPage() {
       setEmail(user.email || "");
       const { data: rows } = await supabase.from("personova_results").select("id").eq("email", user.email).limit(1);
       if (rows && rows.length > 0) setPhase("blocked");
-      else setPhase("test");
+      else { setPhase("test"); track("test_started"); }
     });
   }, [router]);
 
@@ -38,7 +39,11 @@ export default function TestPage() {
   }
   function goNext() {
     if (i < QUESTIONS.length - 1) setI(i + 1);
-    else { setResult(scoreTest(answers.map((a) => (a === null ? 0 : a)))); setPhase("form"); }
+    else {
+      setResult(scoreTest(answers.map((a) => (a === null ? 0 : a))));
+      setPhase("form");
+      track("test_submitted");
+    }
   }
 
   if (phase === "loading") return <main className="test-wrap"><p style={{ textAlign: "center", color: "var(--muted)" }}>Loading…</p></main>;
@@ -177,6 +182,7 @@ function CompletionForm({ email, result, onDone }) {
         throw error;
       }
       await downloadReportPdf(result.code, result.identity, { fullName: fullName.trim() });
+      track("report_downloaded", { type: result.code + "-" + result.identity });
       onDone();
     } catch (e2) {
       setErr(e2.message || "Something went wrong saving your details. Please try again.");
