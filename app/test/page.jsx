@@ -12,6 +12,8 @@ import { COUNTRIES, flag } from "@/lib/countries";
 import { GENRES, expandSelection } from "@/lib/genres";
 import { track } from "@vercel/analytics";
 import Character from "@/components/Character";
+import Report from "@/components/Report";
+import DownloadPdf from "@/components/DownloadPdf";
 
 export default function TestPage() {
   const router = useRouter();
@@ -20,6 +22,7 @@ export default function TestPage() {
   const [answers, setAnswers] = useState(Array(QUESTIONS.length).fill(null));
   const [i, setI] = useState(0);
   const [result, setResult] = useState(null);
+  const [person, setPerson] = useState(null);
 
   // ---- gate: must be logged in; one test per email ----
   useEffect(() => {
@@ -63,22 +66,33 @@ export default function TestPage() {
     );
   }
 
-  if (phase === "form") return <CompletionForm email={email} result={result} onDone={() => setPhase("done")} />;
+  if (phase === "form") return <CompletionForm email={email} result={result} onDone={(p) => { setPerson(p); setPhase("done"); }} />;
 
   if (phase === "done") {
     const t = TYPES[result.code];
+    const role = ROLES[t.role];
     return (
-      <main className="test-wrap" style={{ textAlign: "center" }}>
-        <div className="q-card">
-          <Character code={result.code} size={190} />
-          <div className="result-hero__grid" style={{ display: "block" }}>
-            <div className="code" style={{ color: ROLES[t.role].color }}>{result.code}-{result.identity}</div>
-            <h2 style={{ fontFamily: "var(--font-display)", margin: "4px 0" }}>You're The {t.name}!</h2>
+      <main className="container container--narrow" style={{ padding: "30px 22px 60px" }}>
+        <div className="result-hero" style={{ background: `linear-gradient(135deg, ${role.color}, ${role.color}cc)` }}>
+          <div className="result-hero__grid">
+            <Character code={result.code} size={200} />
+            <div>
+              <div className="code">{result.code}-{result.identity}</div>
+              <h1>You're The {t.name}!</h1>
+              <p className="tagline">Your full report is right here — read it below, and download or print it for keeps.</p>
+            </div>
           </div>
-          <p style={{ color: "var(--muted)" }}>Your full report has downloaded to your device. 🎉</p>
-          <button className="btn btn--ghost" style={{ marginTop: 10 }}
-            onClick={() => downloadReportPdf(result.code, result.identity)}>⬇ Download again</button>
         </div>
+
+        <div className="no-print" style={{ display: "flex", gap: 12, margin: "18px 0", flexWrap: "wrap", justifyContent: "center" }}>
+          <DownloadPdf code={result.code} identity={result.identity} person={person} />
+          <button className="btn btn--ghost" onClick={() => window.print()}>🖨️ Save / Print report</button>
+        </div>
+        <p className="no-print" style={{ textAlign: "center", color: "var(--muted)", fontSize: 13, marginTop: -6, marginBottom: 8 }}>
+          Tip: if the download doesn't start (common in in-app browsers), use <strong>Save / Print → Save as PDF</strong>, or open this page in Chrome/Safari.
+        </p>
+
+        <Report code={result.code} identity={result.identity} />
       </main>
     );
   }
@@ -181,9 +195,13 @@ function CompletionForm({ email, result, onDone }) {
         if (error.code === "23505") { setErr("This email has already completed the test."); setBusy(false); return; }
         throw error;
       }
-      await downloadReportPdf(result.code, result.identity, { fullName: fullName.trim() });
-      track("report_downloaded", { type: result.code + "-" + result.identity });
-      onDone();
+      track("test_completed", { type: result.code + "-" + result.identity });
+      // Show the on-screen report first (guaranteed), THEN best-effort auto-download.
+      // A PDF/download failure must never trap the user or block their report.
+      onDone({ fullName: fullName.trim() });
+      downloadReportPdf(result.code, result.identity, { fullName: fullName.trim() })
+        .then(() => track("report_downloaded", { type: result.code + "-" + result.identity }))
+        .catch(() => {});
     } catch (e2) {
       setErr(e2.message || "Something went wrong saving your details. Please try again.");
       setBusy(false);
