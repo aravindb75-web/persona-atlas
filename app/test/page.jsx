@@ -23,6 +23,7 @@ export default function TestPage() {
   const [i, setI] = useState(0);
   const [result, setResult] = useState(null);
   const [person, setPerson] = useState(null);
+  const [returning, setReturning] = useState(false);
 
   // ---- gate: must be logged in; one test per email ----
   useEffect(() => {
@@ -31,9 +32,14 @@ export default function TestPage() {
       const user = data.session?.user;
       if (!user) { router.replace("/login?next=/test"); return; }
       setEmail(user.email || "");
-      const { data: rows } = await supabase.from("personova_results").select("id").eq("email", user.email).limit(1);
-      if (rows && rows.length > 0) setPhase("blocked");
-      else { setPhase("test"); track("test_started"); }
+      const { data: rows } = await supabase.from("personova_results")
+        .select("type_code, identity").eq("email", user.email).limit(1);
+      if (rows && rows.length > 0) {
+        // Already took it — show their saved report so they can (re)download anytime.
+        setResult({ code: rows[0].type_code, identity: rows[0].identity || "A" });
+        setReturning(true);
+        setPhase("done");
+      } else { setPhase("test"); track("test_started"); }
     });
   }, [router]);
 
@@ -51,21 +57,6 @@ export default function TestPage() {
 
   if (phase === "loading") return <main className="test-wrap"><p style={{ textAlign: "center", color: "var(--muted)" }}>Loading…</p></main>;
 
-  if (phase === "blocked") {
-    return (
-      <main className="test-wrap" style={{ textAlign: "center" }}>
-        <div className="q-card">
-          <div style={{ fontSize: 44 }}>✅</div>
-          <h2 style={{ fontFamily: "var(--font-display)" }}>You've already taken the test</h2>
-          <p style={{ color: "var(--muted)" }}>
-            Each email can take the Personova test once. You signed in as <strong>{email}</strong>.
-          </p>
-          <Link href="/" className="btn btn--ghost" style={{ marginTop: 12 }}>← Back to home</Link>
-        </div>
-      </main>
-    );
-  }
-
   if (phase === "form") return <CompletionForm email={email} result={result} onDone={(p) => { setPerson(p); setPhase("done"); }} />;
 
   if (phase === "done") {
@@ -78,8 +69,12 @@ export default function TestPage() {
             <Character code={result.code} size={200} />
             <div>
               <div className="code">{result.code}-{result.identity}</div>
-              <h1>You're The {t.name}!</h1>
-              <p className="tagline">Your full report is right here — read it below, and download or print it for keeps.</p>
+              <h1>{returning ? `The ${t.name}` : `You're The ${t.name}!`}</h1>
+              <p className="tagline">
+                {returning
+                  ? "Welcome back — here's your saved report. Read it below, and download or print it anytime."
+                  : "Your full report is right here — read it below, and download or print it for keeps."}
+              </p>
             </div>
           </div>
         </div>
